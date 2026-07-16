@@ -64,15 +64,34 @@ export default function ProductDetails({ product }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const res = await fetch(
-    `https://fakestoreapi.com/products/${params.id}`
-  );
-
-  const product = await res.json();
-
-  return {
-    props: {
-      product,
-    },
-  };
-}
+    try {
+      const res = await fetch(
+        `https://fakestoreapi.com/products/${params.id}`,
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+  
+      if (!res.ok) {
+        return {
+          notFound: true,
+        };
+      }
+  
+      const product = await res.json();
+  
+      return {
+        props: {
+          product,
+        },
+      };
+    } catch (error) {
+      console.error("Product API Error:", error);
+  
+      return {
+        notFound: true,
+      };
+    }
+  }

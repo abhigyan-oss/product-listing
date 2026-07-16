@@ -88,32 +88,20 @@ export default function Home({ products }) {
 
 export async function getServerSideProps() {
   try {
-    const res = await fetch("https://fakestoreapi.com/products", {
-      headers: {
-        Accept: "application/json",
-        "User-Agent": "Mozilla/5.0",
-      },
-    });
-
-    console.log("Status:", res.status);
-
-    const text = await res.text();
-    console.log("Response:", text.substring(0, 200));
+    const res = await fetch("https://fakestoreapi.com/products");
 
     if (!res.ok) {
-      throw new Error(`API returned ${res.status}`);
+      throw new Error("Failed to fetch products");
     }
 
-    const products = JSON.parse(text);
+    const products = await res.json();
 
     return {
       props: {
         products,
       },
     };
-  } catch (err) {
-    console.error("SSR ERROR:", err);
-
+  } catch {
     return {
       props: {
         products: [],

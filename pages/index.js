@@ -91,7 +91,7 @@ export async function getServerSideProps() {
     const res = await fetch("https://fakestoreapi.com/products");
 
     if (!res.ok) {
-      throw new Error("Failed to fetch products");
+      throw new Error(`HTTP ${res.status}`);
     }
 
     const products = await res.json();
@@ -101,7 +101,9 @@ export async function getServerSideProps() {
         products,
       },
     };
-  } catch {
+  } catch (error) {
+    console.error("SSR Fetch Error:", error);
+
     return {
       props: {
         products: [],

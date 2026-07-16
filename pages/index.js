@@ -88,7 +88,13 @@ export default function Home({ products }) {
 
 export async function getServerSideProps() {
   try {
-    const res = await fetch("https://fakestoreapi.com/products");
+    const res = await fetch("https://fakestoreapi.com/products", {
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json",
+      },
+      cache: "no-store",
+    });
 
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
@@ -102,7 +108,7 @@ export async function getServerSideProps() {
       },
     };
   } catch (error) {
-    console.error("SSR Fetch Error:", error);
+    console.error(error);
 
     return {
       props: {

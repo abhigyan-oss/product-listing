@@ -69,15 +69,15 @@ export async function getServerSideProps({ params }) {
         `https://fakestoreapi.com/products/${params.id}`,
         {
           headers: {
-            Accept: "application/json",
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0",
           },
+          cache: "no-store",
         }
       );
   
       if (!res.ok) {
-        return {
-          notFound: true,
-        };
+        throw new Error(`HTTP ${res.status}`);
       }
   
       const product = await res.json();
@@ -87,8 +87,8 @@ export async function getServerSideProps({ params }) {
           product,
         },
       };
-    } catch (error) {
-      console.error("Product API Error:", error);
+    } catch (err) {
+      console.error("SSR Product Error:", err);
   
       return {
         notFound: true,

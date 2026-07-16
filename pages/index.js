@@ -90,19 +90,13 @@ export async function getServerSideProps() {
   try {
     const res = await fetch("https://fakestoreapi.com/products", {
       headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         "Accept": "application/json",
-        "Referer": "https://fakestoreapi.com/",
+        "User-Agent": "Mozilla/5.0",
       },
       cache: "no-store",
     });
 
-    console.log("Status:", res.status);
-
     if (!res.ok) {
-      const text = await res.text();
-      console.log("Response:", text);
       throw new Error(`HTTP ${res.status}`);
     }
 
@@ -113,8 +107,8 @@ export async function getServerSideProps() {
         products,
       },
     };
-  } catch (error) {
-    console.error("SSR Fetch Error:", error);
+  } catch (err) {
+    console.error("SSR Fetch Error:", err);
 
     return {
       props: {
